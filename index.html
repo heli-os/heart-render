@@ -1,0 +1,117 @@
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.3.js"
+            integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+    <style>
+        html, body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        #hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .heart-container {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            -webkit-animation-duration: 8s;
+            -webkit-animation-name: fall;
+            -webkit-animation-timing-function: linear;
+        }
+
+        .heart {
+            overflow: hidden;
+            height: 30px;
+            width: 30px;
+            font-size: 20px;
+            text-align: center;
+            color: red;
+            -webkit-animation-duration: 0.5s;
+            -webkit-animation-name: swing;
+            -webkit-animation-timing-function: ease-in-out;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-direction: alternate;
+            -webkit-transform-origin: center center;
+        }
+
+        @-webkit-keyframes swing {
+            from {
+                transform: rotate(-45deg) translateX(10px);
+            }
+            to {
+                transform: rotate(45deg) translateX(-10px);
+            }
+        }
+
+        @-webkit-keyframes spin {
+            from {
+                transform: scaleX(1) translateX(5px);
+            }
+            50% {
+                transform: scaleX(0.1);
+            }
+            to {
+                transform: scaleX(1) translateX(-5px);
+            }
+        }
+
+        @-webkit-keyframes fall {
+            from {
+                top: -20px;
+            }
+            to {
+                top: 100%;
+            }
+        }
+    </style>
+
+    <script>
+        function newHeart() {
+            let hearts = $(".heart");
+            if (hearts.length >= 100) return setTimeout(newHeart, 1000);
+
+            let clonedContainer = $(".heart-container:first").clone();
+            let animations = ['swing', 'spin'];
+            let selectedAnimation = animations[Math.round(Math.random())];
+
+            clonedContainer.find('.heart')
+                .css('opacity', 0.2 + Math.random() * 0.8)
+                .css('-webkit-animation-name', selectedAnimation);
+
+            clonedContainer
+                .css('left', (Math.random() * $('body').innerWidth()) + 'px')
+                .css('-webkit-animation-name', 'fall')
+                .css('-webkit-animation-duration', (4 + Math.random() * 18) + 'px')
+                .css('-webkit-transform', 'scale(' + (0.4 + Math.random() * 2));
+
+            $('#hearts').append(clonedContainer);
+            clonedContainer.bind('animationend', () => {
+                clonedContainer.remove()
+            });
+
+            setTimeout(newHeart, 100);
+        }
+
+        setTimeout(newHeart, 100);
+    </script>
+</head>
+<body>
+<div id="hearts">
+    <div class="heart-container">
+        <div class="heart">
+            &hearts;
+        </div>
+    </div>
+</div>
+</body>
+</html>
